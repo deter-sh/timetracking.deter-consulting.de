@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    {{ include('partials/title-meta.html.twig', {title: 'Zeitübersicht - Deter Consulting'}) }}
+{% endblock %}
+
+{% block body %}
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                {{ include('partials/page-title.html.twig', {pagetitle: 'Dashboard', title: 'Zeitübersicht'}) }}
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Filter</h4>
+                                <form method="get">
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-row">
+                                                <label for="period">Zeitraum</label>
+                                                <select class="form-control" name="period">
+                                                    {% for i, p in periods %}
+                                                    <option value="{{i }}">{{ p }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-row">
+                                                <label for="customer">Kunde</label>
+                                                <select class="form-control" name="customer">
+                                                    {% for c in customers %}
+                                                        <option value="{{c.id }}">{{ c.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-row">
+                                                <label for="btn">&nbsp;</label>
+                                               <input type="submit" name="btn" class="btn btn-primary form-control" value="Filtern">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-row">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Zeiterfassung</h4>
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-responsive">
+                                        <thead>
+                                        <tr>
+                                            <th>Datum</th>
+                                            <th>Zeitrum</th>
+                                            <th>Gesamtzeit</th>
+                                            <th>Beschreibung</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for entry in data %}
+                                        <tr>
+                                            <td>{{ entry.start | date("d.m.Y") }}</td>
+                                            <td>{{ entry.start  | date("H:i")}} - {{ entry.endtime  | date("H:i") }}</td>
+                                            <td>{{ entry.endtime.diff(entry.start) | date("%H:%I")}} h</td>
+                                            <td>{{ entry.project.name }}{% if entry.description %}<br> <i class="text-muted">{{ entry.description}}</i>{% endif %}</td>
+                                        {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="text-align: right;"><b>Gesamt:</b></td>
+                                            <td><b>{{ total }}</b></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+
+        {{ include('partials/footer.html.twig') }}
+    </div>
+{% endblock %}
